@@ -58,7 +58,6 @@ class AuthorView(APIView):
         # Create an article from the above data
         serializer = AuthorSerializer(data=author)
         if serializer.is_valid(raise_exception=True):
-            # author_email = Author.objects.get(email=serializer.email)
             try:
                 Author.objects.get(email=author['email'])
                 return Response({
