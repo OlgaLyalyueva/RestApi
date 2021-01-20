@@ -4,6 +4,7 @@ from django.db import models
 
 
 class Author(models.Model):
+    id = models.IntegerField(auto_created=True, primary_key=True)
     name = models.CharField(max_length=255)
     email = models.EmailField()
 
@@ -14,9 +15,9 @@ class Author(models.Model):
 class Article(models.Model):
     id = models.IntegerField(auto_created=True, primary_key=True)
     title = models.CharField(max_length=120)
-    description = models.TextField()
-    body = models.TextField()
-    author = models.ForeignKey('Author', related_name='articles', on_delete=models.CASCADE)
+    description = models.TextField(max_length=3000)
+    body = models.TextField(max_length=5000)
+    author = models.ForeignKey('Author', related_name='articles', on_delete=models.CASCADE, null=False)
 
     def __str__(self):
         return self.title
