@@ -47,5 +47,14 @@ class SingleAuthorView(RetrieveUpdateDestroyAPIView, UpdateAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
-    def perform_update(self, serializer):
-        serializer.save()
+    def put(self, request, *args, **kwargs):
+        author_id = kwargs
+        try:
+            author = Author.objects.get(email=request.data['email'])
+            if author.id != author_id['pk']:
+                content = {'error': f'User with {request.data["email"]} email already exists'}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return self.partial_update(request, *args, **kwargs)
+        except Author.DoesNotExist:
+            return self.partial_update(request, *args, **kwargs)
