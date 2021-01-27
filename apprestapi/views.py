@@ -47,21 +47,5 @@ class SingleAuthorView(RetrieveUpdateDestroyAPIView, UpdateAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
-    def update(self, request, *args, **kwargs):
-        self.author_id = kwargs['pk']
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        if Author.objects.filter(email=request.data.get('email')).count() > 0:
-            author_data = Author.objects.filter(email=request.data.get('email')).all()
-            for item in author_data.values():
-                if self.author_id != item['id']:
-                    content = {'error': f'This email already exists.'}
-                    return Response(content, status=status.HTTP_409_CONFLICT)
-        self.perform_update(serializer, request)
-        return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
-
-    def perform_update(self, serializer, request):
-        if Author.objects.filter(email=request.data.get('email')).count() > 0:
-            return False
-        else:
-            serializer.save()
+    def perform_update(self, serializer):
+        serializer.save()
