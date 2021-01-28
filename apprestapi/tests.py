@@ -1,8 +1,11 @@
 from django.test import TestCase
-from . models import Author, Article
+from .models import Author, Article
+from .serializers import AuthorSerializer, ArticleSerializer
 
 
 class AutorAndArticleViewTest(TestCase):
+    author = Author.objects.all()
+    article = Article.objects.all()
 
     def setUp(self):
         author = Author.objects.create(
@@ -21,7 +24,9 @@ class AutorAndArticleViewTest(TestCase):
 
     def test_view_authors_url_accessible(self):
         response = self.client.get('/api/authors/')
+        serializer = AuthorSerializer(self.author, many=True)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, serializer.data)
 
     def test_view_author_has_contants(self):
         response = self.client.get('/api/authors/1')
@@ -32,7 +37,9 @@ class AutorAndArticleViewTest(TestCase):
 
     def test_view_articles_url_accessible(self):
         response = self.client.get('/api/articles/')
+        serializer = ArticleSerializer(self.article, many=True)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, serializer.data)
 
     def test_view_articles_has_contants(self):
         response = self.client.get('/api/articles/1')
