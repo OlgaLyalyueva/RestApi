@@ -1,6 +1,6 @@
 from django.test import TestCase
-from .models import Author, Article
-from .serializers import AuthorSerializer, ArticleSerializer
+from apprestapi.models import Author, Article
+from apprestapi.serializers import AuthorSerializer, ArticleSerializer
 
 
 class AutorAndArticleViewTest(TestCase):
